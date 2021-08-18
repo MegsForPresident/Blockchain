@@ -1,7 +1,7 @@
 import java.util.*;
 
 import Util.Block;
-import Util.GenesisBlockError;
+import Util.Errors.GenesisBlockError;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,39 +9,42 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     // TODO Make it to GUI and load the blockchain line which was asked by user and needs a passwords to end which was inputed at the beginning
     public static void main(String[] args) throws GenesisBlockError {
-        LinkedList<Block> blockchain = new LinkedList<>();
-        HashMap<String,Block>blockchains = new HashMap<>();
+        HashMap<String,LinkedList<Block>>blockchains = new HashMap<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
         String step = "";
-        Block pblock = null;
         while(!step.contentEquals("end chain")){
             if(step.contentEquals("new input")){
-                String key = ask("Name for Blockchain: ") + " " +ask("Set the password for "+":");
-                String data = ask("Data: ");
+                LinkedList<Block> blockchain = new LinkedList<>();
+                String name = ask("Name of blockchain:> ");
+                String data = ask("Data:> ");
                 LocalDateTime now = LocalDateTime.now();  
                 String date = dtf.format(now);
-                Block block;
-                if (blockchain.size() == 0){
-                    block = new Block(data,date,0,null);
-                    pblock = block;
-                }
-                else{
-                    block = new Block(data,date,pblock.hash,pblock);
-                    pblock = block;
-                }
+                Block block = new Block(data, date, 0, null);
                 block.print();
-                blockchains.put(key,block);
+                blockchain.add(block);
+                blockchains.put(name.toLowerCase(),blockchain);
             }
-            // else if(step.contentEquals("load chain")){
-            //     String enterPassWord = ask("What is the password for "+":");
-            // }
-            step = ask("").toLowerCase().trim();
-        }
-        for(Block block : blockchain){
-            block.print();
+            else if(step.contains("add block to chain ")){
+                step = step.replace("add block to chain ","");
+                System.out.println(step);
+                String data = ask("Data:> ");
+                LocalDateTime now = LocalDateTime.now();  
+                String date = dtf.format(now);
+                System.out.println(blockchains.get(step));
+                Block pblock = blockchains.get(step).getLast();
+                Block block = new Block(data,date,pblock.hash,pblock);
+                blockchains.get(step).add(block);
+            }
+            step = ask("Prompt:> ").toLowerCase().trim();
+            System.out.println(blockchains);
         }
         scanner.close();
-        System.out.println(blockchains);
+        
+        for(String key : blockchains.keySet()){
+            for(Block block : blockchains.get(key)){
+                block.print();
+            }
+        }
     }
     private static String ask(String prompt){
         System.out.print(prompt);
