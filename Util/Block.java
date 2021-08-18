@@ -1,21 +1,24 @@
 package Util;
 
+import Util.Errors.GenesisBlockError;
+
 public class Block {
     public final String data;
     public final String date;
     protected final int Phash;
     public final int hash;
     private Block Pblock;
-    public Block(String data,String date,int pHash,Block block) throws GenesisBlockError{
+    public Block(String data,String date,int pHash,Block block) throws Util.Errors.GenesisBlockError{
         this.data = data;
         this.date = date;
         this.Phash = pHash;
         this.Pblock = block;
-        if(Pblock!=null){
+        if(Pblock != null){
             this.hash = new Hash(this.Pblock).hash();
         }
         else{
-            this.hash = 0;
+            System.out.println(Pblock);
+            this.hash = 1;
         }
         check();
     }
