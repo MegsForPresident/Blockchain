@@ -10,8 +10,13 @@ public class Block {
         this.data = data;
         this.date = date;
         this.Phash = pHash;
-        this.hash = new Hash(block).hash();
         this.Pblock = block;
+        if(Pblock!=null){
+            this.hash = new Hash(this.Pblock).hash();
+        }
+        else{
+            this.hash = 0;
+        }
         check();
     }
     public void print(){//TODO Delete after completion
