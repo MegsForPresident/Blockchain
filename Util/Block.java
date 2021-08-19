@@ -14,6 +14,7 @@ public class Block {
         this.Phash = pHash;
         this.Pblock = block;
         if(Pblock != null){
+            System.out.println("yes "+Pblock);
             this.hash = new Hash(this.Pblock).hash();
         }
         else{

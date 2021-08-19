@@ -8,6 +8,7 @@ public class Hash{
     }
 
     public int hash(){
-        return Block.Phash + 1;
+        System.out.println(Block.hash);
+        return Block.hash + 1;
     }
 }
