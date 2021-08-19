@@ -1,15 +1,21 @@
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 import Util.Block;
 import Util.Errors.GenesisBlockError;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     // TODO Make it to GUI and load the blockchain line which was asked by user and needs a passwords to end which was inputed at the beginning
-    public static void main(String[] args) throws GenesisBlockError {
+    public static void main(String[] args) throws GenesisBlockError, IOException {
         HashMap<String,LinkedList<Block>>blockchains = new HashMap<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
         String step = "";
@@ -42,12 +48,9 @@ public class Main {
                 
                 blockchains.get(step).add(block);
             }
-            else if(step.contains("save chain ") && step.contains(" >> ")){
-                String[]splits = step.replace("save chain \"", "").split(" >> ");
-                File f = new File(splits[1]);
-                f.mkdir();
-                
-                save(blockchains.get(splits[0]),splits[0]);
+            else if(step.contains("save chain ")){
+                step.replace("save chain \"", "");
+                save(blockchains.get(step),step);
             }
             step = ask("Prompt:> ").toLowerCase().trim();
             System.out.println(blockchains);// TODO Delete after completion
@@ -60,8 +63,16 @@ public class Main {
             }
         }
     }
-    private static void save(LinkedList<Block> linkedList, String string) {
-        //TODO Save;
+    private static void save(LinkedList<Block> linkedList, String name) throws IOException {
+        //TODO Save
+        File file = new File(name+".txt");
+        file.createNewFile();
+        FileWriter writer = new FileWriter(file);
+        for(Block block : linkedList){
+            writer.write(
+                "Data : " + block.data+"\nDate : " + block.date +  "\nHash : " + block.hash + "\n\n"
+            );
+        }
     }
     private static String ask(String prompt){
         System.out.print(prompt);
