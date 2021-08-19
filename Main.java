@@ -3,6 +3,7 @@ import java.util.*;
 import Util.Block;
 import Util.Errors.GenesisBlockError;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class Main {
@@ -17,26 +18,39 @@ public class Main {
                 LinkedList<Block> blockchain = new LinkedList<>();
                 String name = ask("Name of blockchain:> ");
                 String data = ask("Data:> ");
+
                 LocalDateTime now = LocalDateTime.now();  
                 String date = dtf.format(now);
+
                 Block block = new Block(data, date, 0, null);
+
                 block.print();
                 blockchain.add(block);
                 blockchains.put(name.toLowerCase(),blockchain);
             }
-            else if(step.contains("add block to chain ")){
-                step = step.replace("add block to chain ","");
-                System.out.println(step);
+            else if(step.contains("add block >> ")){
+                step = step.replace("add block >> ","");
                 String data = ask("Data:> ");
+
                 LocalDateTime now = LocalDateTime.now();  
                 String date = dtf.format(now);
-                System.out.println(blockchains.get(step));
+
+                System.out.println(blockchains.get(step).getLast());
+                
                 Block pblock = blockchains.get(step).getLast();
                 Block block = new Block(data,date,pblock.hash,pblock);
+                
                 blockchains.get(step).add(block);
             }
+            else if(step.contains("save chain ") && step.contains(" >> ")){
+                String[]splits = step.replace("save chain \"", "").split(" >> ");
+                File f = new File(splits[1]);
+                f.mkdir();
+                
+                save(blockchains.get(splits[0]),splits[0]);
+            }
             step = ask("Prompt:> ").toLowerCase().trim();
-            System.out.println(blockchains);
+            System.out.println(blockchains);// TODO Delete after completion
         }
         scanner.close();
         
@@ -45,6 +59,9 @@ public class Main {
                 block.print();
             }
         }
+    }
+    private static void save(LinkedList<Block> linkedList, String string) {
+        //TODO Save;
     }
     private static String ask(String prompt){
         System.out.print(prompt);
