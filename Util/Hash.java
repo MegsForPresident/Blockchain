@@ -1,4 +1,5 @@
 package Util;
+
 public class Hash{
 
     private Block Block;
