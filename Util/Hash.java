@@ -8,7 +8,6 @@ public class Hash{
     }
 
     public int hash(){
-        System.out.println(Block.hash);
         return Block.hash + 1;
     }
 }
