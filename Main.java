@@ -72,17 +72,20 @@ public class Main {
     private static LinkedList<Block> load(String step) throws FileNotFoundException, GenesisBlockError {
         LinkedList<Block> blocks = new LinkedList<>();
         File file = new File(step + ".txt");
-        String[] content = getContent(file).split("SplitFromHere");
-        String []data = content[0].split("SplitfromHere2"); 
-        System.out.println(Arrays.toString(content));
+        String contentt = getContent(file);
+        System.out.println(contentt);
+        String[] content = contentt.split("--Content--Split--");
+        String []data = content[0].split("--data--spilt--"); 
+        System.out.println(Arrays.toString(content) + " " + Arrays.toString(data));
         Block block = new Block(data[0],data[1],0,null);
         blocks.add(block);
+        System.out.println(blocks);
         for(int i = 1;i < content.length;i++){
-            data = content[1].split("SplitfromHere2"); 
+            data = content[1].split("--data--spilt--"); 
+            System.out.println(data[0]+" "+data[1]+" "+Integer.parseInt(data[2])+" "+blocks.get(i-1));
             block = new Block(data[0],data[1],Integer.parseInt(data[2]),blocks.get(i-1));
             blocks.add(block);
         }
-        //Block block = new Block()
         return blocks;
     }
     private static String getContent(File file) throws FileNotFoundException {
@@ -102,7 +105,7 @@ public class Main {
         System.out.println(linkedList);
         for(Block block : linkedList){
             writer.write(
-                block.data+"SplitfromHere2" + block.date +  "SplitfromHere2" + block.hash + "SplitFromHere"
+                block.data+"--data--spilt--" + block.date +  "--data--spilt--" + block.hash + "--Content--Split--"
             );
         }
         writer.close();
