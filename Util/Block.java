@@ -33,7 +33,7 @@ public class Block {
             }
         }
         else if (this.Phash != this.Pblock.hash){
-            throw new GenesisBlockError("BlockChain has been Compromised " + this.Phash + " " + this.Pblock.hash + " " + this.data+ " " + this.Pblock.data);            
+            throw new GenesisBlockError("BlockChain has been Compromised ");            
         }
     }
 }
