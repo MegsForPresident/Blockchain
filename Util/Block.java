@@ -5,22 +5,16 @@ import Util.Errors.GenesisBlockError;
 public class Block {
     public final String data;
     public final String date;
-    protected final int Phash;
-    public final int hash;
+    protected final String Phash;
+    public final String hash;
     private Block Pblock;
-    
-    public Block(String data,String date,int pHash,Block block) throws Util.Errors.GenesisBlockError{
+    public Block(String data,String date,String pHash,Block block) throws Util.Errors.GenesisBlockError{
         this.data = data;
         this.date = date;
         this.Phash = pHash;
         this.Pblock = block;
-        if(Pblock != null){
-            this.hash = new Hash(this.Pblock).hash();
-        }
-        else{
-            System.out.println(Pblock);
-            this.hash = 1;
-        }
+        
+        this.hash = new Hash(new Transformer(data,date)).hash();
         check();
     }
     public void print(){//TODO Delete after completion
@@ -28,8 +22,8 @@ public class Block {
     }
     private void check() throws GenesisBlockError{
         if(this.Pblock == null){
-            if(this.Phash != 0){
-                throw new GenesisBlockError("ID and Block both have to 0 and Null respectively");
+            if(this.Phash != ""){
+                throw new GenesisBlockError("ID and Block both have to empty and Null respectively");
             }
         }
         else if (this.Phash != this.Pblock.hash){
