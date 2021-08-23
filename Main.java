@@ -15,7 +15,6 @@ import Util.Errors.GenesisBlockError;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    // TODO Make it to GUI and load the blockchain line which was asked by user and needs a passwords to end which was inputed at the beginning
     public static void main(String[] args) throws GenesisBlockError, IOException {
         HashMap<String,LinkedList<Block>>blockchains = new HashMap<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
@@ -29,7 +28,7 @@ public class Main {
                 LocalDateTime now = LocalDateTime.now();  
                 String date = dtf.format(now);
 
-                Block block = new Block(data, date, 0, null);
+                Block block = new Block(data, date, "", null);
 
                 block.print();
                 blockchain.add(block);
@@ -77,13 +76,13 @@ public class Main {
         String[] content = contentt.split("--Content--Split--");
         String []data = content[0].split("--data--spilt--"); 
         System.out.println(Arrays.toString(content) + " " + Arrays.toString(data));
-        Block block = new Block(data[0],data[1],0,null);
+        Block block = new Block(data[0],data[1],"",null);
         blocks.add(block);
         System.out.println(blocks);
         for(int i = 1;i < content.length;i++){
             data = content[1].split("--data--spilt--"); 
             System.out.println(data[0]+" "+data[1]+" "+Integer.parseInt(data[2])+" "+blocks.get(i-1));
-            block = new Block(data[0],data[1],Integer.parseInt(data[2]),blocks.get(i-1));
+            block = new Block(data[0],data[1],data[2],blocks.get(i-1));
             blocks.add(block);
         }
         return blocks;
