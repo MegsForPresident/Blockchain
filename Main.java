@@ -58,7 +58,7 @@ public class Main {
                 System.out.println(blockchains);
             }
             step = ask("Prompt:> ").toLowerCase().trim();
-            System.out.println(blockchains);// TODO Delete after completion
+            System.out.println(blockchains);
         }
         scanner.close();
         
