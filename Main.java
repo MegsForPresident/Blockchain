@@ -15,7 +15,9 @@ import Util.Errors.GenesisBlockError;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
+    private static String username;
     public static void main(String[] args) throws GenesisBlockError, IOException {
+        username =  getUserName();
         HashMap<String,LinkedList<Block>>blockchains = new HashMap<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
         String step = "";
@@ -70,7 +72,7 @@ public class Main {
     }
     private static LinkedList<Block> load(String step) throws FileNotFoundException, GenesisBlockError {
         LinkedList<Block> blocks = new LinkedList<>();
-        File file = new File(step + ".txt");
+        File file = new File("C:\\Users\\"+username+"\\Blocks\\"+step + ".txt");
         String contentt = getContent(file);
         System.out.println(contentt);
         String[] content = contentt.split("--Content--Split--");
@@ -87,6 +89,23 @@ public class Main {
         }
         return blocks;
     }
+    private static String getUserName() throws FileNotFoundException {
+        if(new File("username.txt").exists()){
+            return content("username.txt");
+        }
+        File file = new File("C:\\Users");
+        String[]a = file.list();
+        for(String g : a){
+            if(!(g.contentEquals("Default") || g.contentEquals("Public"))){
+                return g;
+            }
+        }
+        return "Public";
+    }
+    private static String content(String string) throws FileNotFoundException {
+        Scanner scan = new Scanner(new File(string));
+        return scan.nextLine();
+    }
     private static String getContent(File file) throws FileNotFoundException {
         String data = "";
         Scanner scan = new Scanner(file);
@@ -98,7 +117,7 @@ public class Main {
     }
     private static void save(LinkedList<Block> linkedList, String name) throws IOException {
         //TODO Save
-        File file = new File(name+".txt");
+        File file = new File("C:\\Users\\"+username+"\\Blocks\\"+name+".txt");
         file.createNewFile();
         FileWriter writer = new FileWriter(file);
         System.out.println(linkedList);
@@ -107,6 +126,10 @@ public class Main {
                 block.data+"--data--spilt--" + block.date +  "--data--spilt--" + block.hash + "--Content--Split--"
             );
         }
+        writer.close();
+        file = new File("username.txt");
+        writer = new FileWriter(file);
+        writer.write(username);
         writer.close();
     }
     private static String ask(String prompt){
